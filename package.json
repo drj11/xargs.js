@@ -1,0 +1,19 @@
+{
+  "name": "xargs.js",
+  "version": "0.0.0",
+  "description": "Unix xargs written for node.js",
+  "main": "code/xargs.js",
+  "scripts": {
+    "test": "XARGS=code/xargs.coffee test/all",
+    "prepublish": "coffee -c code"
+  },
+  "repository": "",
+  "keywords": [
+    "xargs"
+  ],
+  "author": "David Jones <drj@pobox.com>",
+  "license": "BSD",
+  "dependencies": {
+    "optimist": "~0.4.0"
+  }
+}
