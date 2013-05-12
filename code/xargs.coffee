@@ -24,7 +24,6 @@ arg1 = (arg, cb) ->
 invoke = (cb) ->
   if arg_list.length == 0
     return setTimeout cb, 0
-  out = require('fs').openSync('echo.out', 'w')
   l = [ 'ignore', 1, 2]
   child = child_process.spawn utility, arg_list, stdio: l
   arg_list = []
