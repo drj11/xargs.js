@@ -10,7 +10,9 @@ optimist = require 'optimist'
 
 argv = optimist.boolean('tpx'.split '').argv
 
-n = 2
+n = Infinity
+if +argv.n
+  n = 0|argv.n
 utility = 'echo'
 arg_list = []
 arg1 = (arg, cb) ->
