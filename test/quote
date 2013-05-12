@@ -17,7 +17,6 @@ esac
 
 # Backslash escapes.
 res=$(echo 'foo\ bar' baz | $XARGS -n 2)
-printf '%s\n' "$res"
 case $res in
   ('foo bar baz') ;;
   (*) exit 7 ;;
