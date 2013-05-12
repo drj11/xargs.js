@@ -1,10 +1,26 @@
 #!/bin/sh
 : ${XARGS?Please set XARGS environment variable}
 
+# Quotes glom arguments.
 res=$(echo "foo' 'bar" baz | $XARGS -n 2)
 case $res in
   ('foo bar baz') ;;
   (*) exit 9 ;;
+esac
+
+# Double quotes glom arguments.
+res=$(echo 'foo" "bar' baz | $XARGS -n 2)
+case $res in
+  ('foo bar baz') ;;
+  (*) exit 8 ;;
+esac
+
+# Backslash escapes.
+res=$(echo 'foo\ bar' baz | $XARGS -n 2)
+printf '%s\n' "$res"
+case $res in
+  ('foo bar baz') ;;
+  (*) exit 7 ;;
 esac
 
 printf '%s\n' "$0 passed"

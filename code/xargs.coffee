@@ -17,7 +17,7 @@ utility = 'echo'
 arg_list = []
 arg1 = (arg, cb) ->
   # Unquote the arg.
-  arg = arg.replace /'[^']*'|"[^"]*"|\\[.\n]|[^ \n\\'"]/g, (x) ->
+  arg = arg.replace /'[^']*'|"[^"]*"|\\(?:.|\n)|[^ \n\\'"]/g, (x) ->
     if /^['"]/.test x
       return x[1..-2]
     if x[0] == '\\'
@@ -50,7 +50,7 @@ input = ''
 process.stdin.on 'data', (data) ->
   readingData = true
   input += data
-  re = /[ \n]*((?:'[^']*'|"[^"]*"|\\[.\n]|[^ \n\\'"])+)[ \n]+/gm
+  re = /[ \n]*((?:'[^']*'|"[^"]*"|\\(?:.|\n)|[^ \n\\'"])+)[ \n]+/gm
   args = []
   # When loop is finished, remove initial *trim* characters of *input*.
   trim = 0
