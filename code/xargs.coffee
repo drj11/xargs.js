@@ -16,6 +16,13 @@ if +argv.n
 utility = 'echo'
 arg_list = []
 arg1 = (arg, cb) ->
+  # Unquote the arg.
+  arg = arg.replace /'[^']*'|"[^"]*"|\\[.\n]|[^ \n\\'"]/g, (x) ->
+    if /^['"]/.test x
+      return x[1..-2]
+    if x[0] == '\\'
+      return x[1]
+    return x
   arg_list.push arg
   if arg_list.length >= n
     return invoke cb
