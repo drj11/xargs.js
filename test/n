@@ -1,7 +1,7 @@
 #!/bin/sh
 : ${XARGS?Please set XARGS environment variable}
 
-res=$(echo foo bar baz | code/xargs.coffee -n 2)
+res=$(echo foo bar baz | $XARGS -n 2)
 case $res in
   ('foo bar
 baz') ;;
