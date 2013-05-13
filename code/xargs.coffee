@@ -9,7 +9,7 @@ async = require 'async'
 # process options: can't use optimist because it handles arguments that
 # look like options as options.
 
-boolopt = {}
+boolopt = {t:true}
 argv = {}
 process.argv.shift()
 process.argv.shift()
@@ -23,10 +23,10 @@ while process.argv.length
     break
   if a[0] == '-'
     a = a[1..]
+    process.argv.shift()
     if boolopt[a]
       argv[a] = true
     else
-      process.argv.shift()
       v = process.argv.shift()
       if !isNaN(Number(v))
         v = Number v
@@ -61,7 +61,10 @@ invoke = (cb) ->
   if arg_list.length == 0
     return setTimeout cb, 0
   l = [ 'ignore', 1, 2]
-  child = child_process.spawn utility, utility_args.concat(arg_list), stdio: l
+  args = utility_args.concat(arg_list)
+  if argv.t
+    console.warn [utility].concat(args).join ' '
+  child = child_process.spawn utility, args, stdio: l
   arg_list = []
   child.on 'error', (err) ->
     cb()

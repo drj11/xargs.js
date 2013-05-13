@@ -1,0 +1,10 @@
+#!/bin/sh
+: ${XARGS?Please set XARGS environment variable}
+
+res=$(echo foo | $XARGS -t test 2>&1)
+case $res in
+  ('test foo') ;;
+  (*) exit 9 ;;
+esac
+
+printf '%s\n' "$0 passed"
