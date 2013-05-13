@@ -10,6 +10,7 @@ async = require 'async'
 # look like options as options.
 
 boolopt = {t:true}
+stringopt = {E:true}
 argv = {}
 process.argv.shift()
 process.argv.shift()
@@ -28,7 +29,7 @@ while process.argv.length
       argv[a] = true
     else
       v = process.argv.shift()
-      if !isNaN(Number(v))
+      if !stringopt[a] and !isNaN(Number(v))
         v = Number v
       argv[a] = v
   else
@@ -43,6 +44,9 @@ if argv._.length >= 1
   utility = argv._[0]
 utility_args = argv._[1..]
 
+if argv.E == ''
+  argv.E = null
+
 arg_list = []
 arg1 = (arg, cb) ->
   # Unquote the arg.
@@ -52,6 +56,11 @@ arg1 = (arg, cb) ->
     if x[0] == '\\'
       return x[1]
     return x
+  if arg == argv.E
+    if arg_list.length
+      return invoke () -> cb 'eof'
+    else
+      return setTimeout () -> cb 'eof', 0
   arg_list.push arg
   if arg_list.length >= n
     return invoke cb
