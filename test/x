@@ -1,0 +1,15 @@
+#!/bin/sh
+: ${XARGS?Please set XARGS environment variable}
+
+len=99
+res=$(echo a b cardamine | $XARGS -s 10 -n 2 -x echo 2>&- )
+if ! [ 1 -le $? -a $? -le 124 ]
+then
+  exit 9
+fi
+case $res in
+  ('a b') ;;
+  (*) exit 8 ;;
+esac
+
+printf '%s\n' "$0 passed"

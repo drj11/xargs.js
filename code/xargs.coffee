@@ -9,7 +9,7 @@ async = require 'async'
 # process options: can't use optimist because it handles arguments that
 # look like options as options.
 
-boolopt = {t:true}
+boolopt = {t:true, x:true}
 stringopt = {E:true}
 argv = {}
 process.argv.shift()
@@ -74,6 +74,9 @@ arg1 = (arg, cb) ->
       return setTimeout () -> cb 'eof', 0
   blen = byte_length arg
   if s and arg_byte_length + blen >= s
+    if argv.x
+      console.warn "Cannot meet -n and -s constraints"
+      process.exit 24
     invoke cb
   arg_list.push arg
   arg_byte_length += blen
