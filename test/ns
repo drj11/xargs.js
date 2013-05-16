@@ -1,12 +1,13 @@
 #!/bin/sh
 : ${XARGS?Please set XARGS environment variable}
 
-#Interaction of -n and -s
+# Interaction of -n and -s
 
-res=$(yes foo | sed 99q | $XARGS -s 99 -n 55 echo | awk '{print length($0)}')
+len=99
+res=$(yes foo | sed ${len}q | $XARGS -s $len -n $(($len / 2)) echo | awk '{print length($0)}')
 for length in $res
 do
-  if [ $length -ge 99 ]
+  if [ $length -ge $len ]
   then
     exit 9
   fi
