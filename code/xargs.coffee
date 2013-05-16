@@ -39,6 +39,7 @@ argv._ = process.argv.slice()
 n = Infinity
 if +argv.n
   n = 0|argv.n
+s = 0|argv.s
 utility = 'echo'
 if argv._.length >= 1
   utility = argv._[0]
@@ -47,7 +48,17 @@ utility_args = argv._[1..]
 if argv.E == ''
   argv.E = null
 
+byte_length = (a) ->
+  # :todo: doesn't yet work for non-ASCII strings.
+  a.length + 1
+
+utility_byte_length = 0
+for a in [utility].concat utility_args
+  utility_byte_length += byte_length a
 arg_list = []
+# Length in bytes of arg_list (when each item is treated as
+# a NUL-terminated utf-8 string).
+arg_byte_length = utility_byte_length
 arg1 = (arg, cb) ->
   # Unquote the arg.
   arg = arg.replace /'[^']*'|"[^"]*"|\\(?:.|\n)|[^ \n\\'"]/g, (x) ->
@@ -61,7 +72,11 @@ arg1 = (arg, cb) ->
       return invoke () -> cb 'eof'
     else
       return setTimeout () -> cb 'eof', 0
+  blen = byte_length arg
+  if s and arg_byte_length + blen >= s
+    invoke cb
   arg_list.push arg
+  arg_byte_length += blen
   if arg_list.length >= n
     return invoke cb
   else
@@ -75,6 +90,7 @@ invoke = (cb) ->
     console.warn [utility].concat(args).join ' '
   child = child_process.spawn utility, args, stdio: l
   arg_list = []
+  arg_byte_length = utility_byte_length
   child.on 'error', (err) ->
     cb()
   child.on 'exit', (code, signal) ->

@@ -1,0 +1,14 @@
+#!/bin/sh
+: ${XARGS?Please set XARGS environment variable}
+
+# Splits command to fit.
+# Technically, "-s 13" ought to have the same output, but GNU
+# xargs allows the command size to equal the -s argument.
+res=$(echo foo bar baz | $XARGS -s 14 echo )
+case $res in
+  ('foo bar
+baz') ;;
+  (*) exit 9 ;;
+esac
+
+printf '%s\n' "$0 passed"
