@@ -122,6 +122,21 @@ process.stdin.on 'end', ->
     invoke ->
       process.exit 88
 
-process.stdin.resume()
-nothing = ->
-# setInterval nothing, 1e6
+# Could compute these values once at install time.
+LINE_MAX = ''
+ARG_MAX = ''
+child = child_process.spawn 'getconf', ['LINE_MAX']
+child.stdout.on 'data', (data) ->
+  LINE_MAX += data
+child.on 'exit', () ->
+  LINE_MAX = Number(LINE_MAX)
+  if isNaN LINE_MAX
+    LINE_MAX = 2048
+  child = child_process.spawn 'getconf', ['ARG_MAX']
+  child.stdout.on 'data', (data) ->
+    ARG_MAX += data
+  child.on 'exit', () ->
+    ARG_MAX = Number(ARG_MAX)
+    if isNaN ARG_MAX
+      ARG_MAX = 2e6
+  process.stdin.resume()
