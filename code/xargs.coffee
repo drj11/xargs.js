@@ -2,6 +2,7 @@
 
 # http://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
 child_process = require 'child_process'
+fs = require 'fs'
 
 # https://github.com/caolan/async/
 async = require 'async'
@@ -9,7 +10,7 @@ async = require 'async'
 # process options: can't use optimist because it handles arguments that
 # look like options as options.
 
-boolopt = {t:true, x:true}
+boolopt = {p:true, t:true, x:true}
 stringopt = {E:true}
 argv = {}
 process.argv.shift()
@@ -40,6 +41,8 @@ n = Infinity
 if +argv.n
   n = 0|argv.n
 s = 0|argv.s
+if argv.p
+  argv.t = true
 utility = 'echo'
 if argv._.length >= 1
   utility = argv._[0]
@@ -87,11 +90,35 @@ arg1 = (arg, cb) ->
 invoke = (cb) ->
   if arg_list.length == 0
     return setTimeout cb, 0
-  l = [ 'ignore', 1, 2]
   args = utility_args.concat(arg_list)
   if argv.t
-    console.warn [utility].concat(args).join ' '
-  child = child_process.spawn utility, args, stdio: l
+    trace = [utility].concat(args).join ' '
+    if argv.p
+      trace += '?...'
+    console.warn trace
+  # Prompt if necessary.
+  if not argv.p
+    return goChild cb
+  tty = fs.createReadStream '/dev/tty'
+  decided = false
+  tty.on 'data', (data) ->
+    decided = true
+    tty.close()
+    if /^y/i.test data
+      # Affirmitive response
+      return goChild cb
+    else
+      arg_list = []
+      arg_byte_length = utility_byte_length
+      return cb()
+  tty.on 'end', () ->
+    if not decided
+      cb()
+
+goChild = (cb) ->
+  args = utility_args.concat(arg_list)
+  stdio = [ 'ignore', 1, 2]
+  child = child_process.spawn utility, args, stdio: stdio
   arg_list = []
   arg_byte_length = utility_byte_length
   child.on 'error', (err) ->
