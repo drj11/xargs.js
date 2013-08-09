@@ -4,7 +4,7 @@
   "description": "Unix xargs written for node.js",
   "main": "code/xargs.js",
   "scripts": {
-    "test": "npm install && XARGS=code/xargs.js test/all",
+    "test": "npm install && XARGS=../code/xargs.js node_modules/.bin/urchin test",
     "prepublish": "{ echo '#!/usr/bin/env node'; coffee -p code/xargs.coffee;} > code/tmp.js && mv code/tmp.js code/xargs.js && chmod +x code/xargs.js"
   },
   "repository": "",

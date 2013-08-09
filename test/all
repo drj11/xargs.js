@@ -1,9 +1,0 @@
-#!/bin/sh
-
-for t in test/*
-do
-  case $t in
-    (test/all) ;;
-    (*) $t || printf '%s fail: exit status %s\n' "$t" $? ;;
-  esac
-done
