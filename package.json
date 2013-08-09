@@ -16,5 +16,8 @@
   "dependencies": {
     "optimist": "~0.4.0",
     "async": "~0.2.8"
+  },
+  "devDependencies": {
+    "urchin": "~0.0.1"
   }
 }
