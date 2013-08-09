@@ -21,6 +21,9 @@ if argv._.length >= 1
   utility = argv._[0]
 utility_args = argv._[1..]
 
+if /utility/.test process.env.XARGS_DEBUG
+  console.warn "utility", utility, utility_args
+
 if argv.E == ''
   argv.E = null
 
