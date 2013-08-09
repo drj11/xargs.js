@@ -1,2 +1,4 @@
+.urchin.log
 ignore
 node_modules
+*.js
