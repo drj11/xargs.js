@@ -7,35 +7,8 @@ fs = require 'fs'
 # https://github.com/caolan/async/
 async = require 'async'
 
-# process options: can't use optimist because it handles arguments that
-# look like options as options.
-
-boolopt = {p:true, t:true, x:true}
-stringopt = {E:true}
-argv = {}
-process.argv.shift()
-process.argv.shift()
-while process.argv.length
-  a = process.argv[0]
-  if a == '--'
-    process.argv.shift()
-    break
-  if a == '-'
-    # Probably an argument, not an option.
-    break
-  if a[0] == '-'
-    a = a[1..]
-    process.argv.shift()
-    if boolopt[a]
-      argv[a] = true
-    else
-      v = process.argv.shift()
-      if !stringopt[a] and !isNaN(Number(v))
-        v = Number v
-      argv[a] = v
-  else
-    break
-argv._ = process.argv.slice()
+argv = require('optimist').posix()
+  .boolean('p', 't', 'x').string('E').argv
 
 n = Infinity
 if +argv.n
