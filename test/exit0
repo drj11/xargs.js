@@ -1,0 +1,4 @@
+#!/bin/sh
+: ${XARGS?Please set XARGS environment variable}
+
+echo foo bar baz | $XARGS -n 1 true

@@ -91,6 +91,7 @@ invoke = (cb) ->
     if not decided
       cb()
 
+EXIT_STATUS = 0
 goChild = (cb) ->
   args = utility_args.concat(arg_list)
   stdio = [ 'ignore', 1, 2]
@@ -103,6 +104,7 @@ goChild = (cb) ->
     if code == 255
       console.warn "Utility #{utility} exited with code #{code}"
       process.exit 55
+    EXIT_STATUS = Math.max EXIT_STATUS, code
     cb()
 
 # Slightly complicated state handling to deal with case
@@ -134,15 +136,15 @@ process.stdin.on 'data', (data) ->
     process.stdin.resume()
     if ended
       # got stdin 'end' while we were in the async call
-      invoke ->
-        process.exit 77
+      invoke EXIT
 
 process.stdin.on 'end', ->
   if readingData
     ended = true
   else
-    invoke ->
-      process.exit 88
+    invoke EXIT
+
+EXIT = -> process.exit EXIT_STATUS
 
 # Could compute these values once at install time.
 LINE_MAX = ''
