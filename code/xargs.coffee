@@ -101,6 +101,8 @@ goChild = (cb) ->
   child.on 'error', (err) ->
     cb()
   child.on 'exit', (code, signal) ->
+    if /exit/.test process.env.XARGS_DEBUG
+      console.warn "Utility #{utility} exited with code #{code}"
     if code == 255
       console.warn "Utility #{utility} exited with code #{code}"
       process.exit 55
