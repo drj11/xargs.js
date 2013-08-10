@@ -7,7 +7,10 @@
     "test": "npm install && XARGS=../code/xargs.js node_modules/.bin/urchin test",
     "prepublish": "{ echo '#!/usr/bin/env node'; coffee -p code/xargs.coffee;} > code/tmp.js && mv code/tmp.js code/xargs.js && chmod +x code/xargs.js"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/drj11/xargs.js.git"
+  },
   "keywords": [
     "xargs"
   ],
@@ -19,5 +22,10 @@
   },
   "devDependencies": {
     "urchin": "~0.0.1"
+  },
+  "readmeFilename": "README.md",
+  "gitHead": "eb3e5d95b7969909a50010b1a4c5e50dd960438f",
+  "directories": {
+    "test": "test"
   }
 }
